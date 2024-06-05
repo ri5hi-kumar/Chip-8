@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 Chip8 chip8;
+char *rom_file = "some_rom";
 
 int main()
 {
@@ -13,10 +14,13 @@ int main()
 
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
 
+    initialise_chip8(&chip8);
+    load_rom(&chip8, rom_file);
+
     // Main game loop
     while (!WindowShouldClose()) // Detect window close button or ESC key
     {
-        // TODO: Update your variables here
+        emulate_cycle(&chip8);
 
         // Draw
         BeginDrawing();

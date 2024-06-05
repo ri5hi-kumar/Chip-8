@@ -1,6 +1,16 @@
 #ifndef CHIP8_H
 #define CHIP8_H
 
+#include "instructions.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+#define PC_START 0x200
+#define CHIP8_RAM_START_ADDR 0x000
+#define CHIP8_RAM_END_ADDR 0x1FF
+#define PROGRAM_START_ADDR 0x200
+#define PROGRAM_END_ADDR 0xFFF
+
 typedef struct Chip8
 {
     unsigned short opcode;          // store the current opcode 2 bytes long
@@ -12,8 +22,12 @@ typedef struct Chip8
     unsigned char sound_timer;
     unsigned char SP;               // used to point to the topmost level of the stack
     unsigned short stack[16];       // used to store the address that the interpreter shoud return to when finished with a subroutine
-    unsigned char gfx[64 * 32];     // display
+    unsigned char gfx[64][32];      // display
     unsigned char key[16];          // keypad
 } Chip8;
+
+void load_rom(Chip8 *chip8, const char *rom_file);
+void initialize_chip8(Chip8 *chip8);
+void emulate_cycle(Chip8 *chip8);
 
 #endif
