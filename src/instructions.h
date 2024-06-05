@@ -1,7 +1,7 @@
 #ifndef INSTRUCTIONS_H
 #define INSTRUCTIONS_H
 
-#include "chip8.h";
+#include "chip8.h"
 
 /*
     nnn or addr - A 12-bit value, the lowest 12 bits of the instruction
