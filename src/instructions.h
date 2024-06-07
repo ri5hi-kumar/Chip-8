@@ -1,7 +1,7 @@
 #ifndef INSTRUCTIONS_H
 #define INSTRUCTIONS_H
 
-#include "chip8.h"
+#include "chip8_context.h"
 
 /*
     nnn or addr - A 12-bit value, the lowest 12 bits of the instruction
@@ -19,7 +19,7 @@ void se_Vx_kk(Chip8 *chip8);        // (3xkk) skip next instruction if Vx = kk
 void sne_Vx_kk(Chip8 *chip8);       // (4xkk) skip next instruction if Vx != kk
 void se_Vx_Vy(Chip8 *chip8);        // (5xy0) skip next instruction if Vx = Vy
 void ld_Vx(Chip8 *chip8);           // (6xkk) set Vx = kk
-void add_Vx_imm(Chip8 *chip8);          // (7xkk) set Vx = Vx + kk
+void add_Vx_kk(Chip8 *chip8);          // (7xkk) set Vx = Vx + kk
 void ld_Vx_Vy(Chip8 *chip8);        // (8xy0) set Vx = Vy
 void or_Vx_Vy(Chip8 *chip8);        // (8xy1) set Vx = Vx OR Vy
 void and_Vx_Vy(Chip8 *chip8);       // (8xy2) set Vx = Vx AND Vy

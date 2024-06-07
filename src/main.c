@@ -14,7 +14,7 @@ int main()
 
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
 
-    initialise_chip8(&chip8);
+    initialize_chip8(&chip8);
     load_rom(&chip8, rom_file);
 
     // Main game loop
