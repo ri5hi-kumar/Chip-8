@@ -2,6 +2,8 @@
 #define INSTRUCTIONS_H
 
 #include "chip8_context.h"
+#include <time.h>
+#include <stdlib.h>
 
 /*
     nnn or addr - A 12-bit value, the lowest 12 bits of the instruction
@@ -19,7 +21,7 @@ void se_Vx_kk(Chip8 *chip8);        // (3xkk) skip next instruction if Vx = kk
 void sne_Vx_kk(Chip8 *chip8);       // (4xkk) skip next instruction if Vx != kk
 void se_Vx_Vy(Chip8 *chip8);        // (5xy0) skip next instruction if Vx = Vy
 void ld_Vx(Chip8 *chip8);           // (6xkk) set Vx = kk
-void add_Vx_kk(Chip8 *chip8);          // (7xkk) set Vx = Vx + kk
+void add_Vx_kk(Chip8 *chip8);       // (7xkk) set Vx = Vx + kk
 void ld_Vx_Vy(Chip8 *chip8);        // (8xy0) set Vx = Vy
 void or_Vx_Vy(Chip8 *chip8);        // (8xy1) set Vx = Vx OR Vy
 void and_Vx_Vy(Chip8 *chip8);       // (8xy2) set Vx = Vx AND Vy
@@ -43,7 +45,7 @@ void ld_st_Vx(Chip8 *chip8);        // (Fx18) set sound timer = Vx
 void add_i_Vx(Chip8 *chip8);        // (Fx1E) set I = I + Vx
 void ld_F_Vx(Chip8 *chip8);         // (Fx29) set I = location of sprite for digit Vx
 void ld_bcd_Vx(Chip8 *chip8);       // (Fx33) store BCD representation of Vx in memory locations I, I+1, and I+2
-void ld_regs_Vx(Chip8 *chip8);       // (Fx55) store registers V0 through Vx in memory starting at location I
-void ld_Vx_regs(Chip8 *chip8);       // (Fx65) read registers V0 through Vx from memory starting at location I
+void ld_regs_Vx(Chip8 *chip8);      // (Fx55) store registers V0 through Vx in memory starting at location I
+void ld_Vx_regs(Chip8 *chip8);      // (Fx65) read registers V0 through Vx from memory starting at location I
 
 #endif
