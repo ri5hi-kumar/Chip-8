@@ -12,8 +12,8 @@
  * Clear the display.
  */
 void cls(Chip8 *chip8) {
-    for(int i = 0; i < 32; i++) {
-        for(int j = 0; j < 64; j++) {
+    for(int i = 0; i < 64; i++) {
+        for(int j = 0; j < 32; j++) {
             chip8->gfx[i][j] = 0;
         }
     }
@@ -283,8 +283,44 @@ void rnd(Chip8 *chip8) {
     chip8->PC += 2;
 }
 
+/*
+ * Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
+ * The interpreter reads n bytes from memory, starting at the address stored in I. These bytes are then displayed as
+ * sprites on screen at coordinates (Vx, Vy). Sprites are XORed onto the existing screen. If this causes any pixels to
+ * be erased, VF is set to 1, otherwise it is set to 0. If the sprite is positioned so part of it is outside the
+ * coordinates of the display, it wraps around to the opposite side of the screen.
+ */
 void drw(Chip8 *chip8) {
+    unsigned char regX = (chip8->opcode & 0x0F00) >> 8;
+    unsigned char regY = (chip8->opcode & 0x00F0) >> 4;
+    int n = (chip8->opcode & 0x000F);
+    int width = 8;
 
+    chip8->V[0xF] = 0;
+
+    for (int row = 0; row < n; row++) {
+        // Get a row one of sprite data from the memory address in reg I (one byte per row)
+        unsigned char spriteData = (chip8->memory[chip8->I + row]);
+
+        // for each 8 pixels/bits in this sprite row
+        for (int col = 0; col < width; col++) {
+            // if the current pixel in the sprite row is on,
+            // and the screen pixel at X,Y is on, set pixel to 0, set VF to 1
+            if ((spriteData & 0x80) > 0) {
+                int x = chip8->V[regX] + col;
+                int y = chip8->V[regY] + row;
+                if ((x >= 0 && x < 64) && (y >= 0 && y < 32)) {
+                    if (chip8->gfx[x][y] == 1) {
+                        chip8->V[0xF] = 1;
+                    }
+                    chip8->gfx[x][y] ^= 1;
+                }
+            }
+            // Point spriteData to the next bit
+            spriteData <<= 1;
+        }
+    }
+    chip8->PC += 2;
 }
 
 void skp(Chip8 *chip8) {
@@ -339,18 +375,47 @@ void add_i_Vx(Chip8 *chip8) {
     chip8->PC += 2;
 }
 
+/*
+ * Set I = location of sprite for digit Vx.
+ * The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx.
+ */
 void ld_F_Vx(Chip8 *chip8) {
-
-}
-
-void ld_bcd_Vx(Chip8 *chip8) {
-
-}
-
-void ld_regs_Vx(Chip8 *chip8) {
-
-}
-
-void ld_Vx_regs(Chip8 *chip8) {
     
+}
+
+/*
+ * Store BCD representation of Vx in memory locations I, I+1, and I+2.
+ * The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I,
+ * the tens digit at location I+1, and the ones digit at location I+2.
+ */
+void ld_bcd_Vx(Chip8 *chip8) {
+    unsigned char x = (chip8->opcode & 0x0F00) >> 8;
+    chip8->memory[chip8->I] = chip8->V[x] / 100;
+    chip8->memory[chip8->I + 1] = (chip8->V[x] / 10) % 10;
+    chip8->memory[chip8->I + 2] = (chip8->V[x] % 100) % 10;
+    chip8->PC += 2;
+}
+
+/*
+ * Store registers V0 through Vx in memory starting at location I.
+ * The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
+ */
+void ld_regs_Vx(Chip8 *chip8) {
+    unsigned char x = (chip8->opcode & 0x0F00) >> 8;
+    for(unsigned char i = 0; i <= x; i++) {
+        chip8->memory[chip8->I + i] = chip8->V[i]; 
+    }
+    chip8->PC += 2;
+}
+
+/*
+ * Read registers V0 through Vx from memory starting at location I.
+ * The interpreter reads values from memory starting at location I into registers V0 through Vx.
+ */
+void ld_Vx_regs(Chip8 *chip8) {
+    unsigned char x = (chip8->opcode & 0x0F00) >> 8;
+    for(unsigned char i = 0; i <= x; i++) {
+        chip8->V[i] = chip8->memory[chip8->I + i]; 
+    }
+    chip8->PC += 2;
 }

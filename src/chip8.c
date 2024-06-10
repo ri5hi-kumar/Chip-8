@@ -45,10 +45,11 @@ void initialize_chip8(Chip8 *chip8) {
     chip8->I = 0;
     chip8->sound_timer = 0;
     chip8->delay_timer = 0;
+    chip8->draw_flag = 0;
 
     // clearing the display
-    for(int i = 0; i < 32; i++) {
-        for(int j = 0; j < 64; j++) {
+    for(int i = 0; i < 64; i++) {
+        for(int j = 0; j < 32; j++) {
             chip8->gfx[i][j] = 0;
         }
     }
@@ -107,7 +108,7 @@ void emulate_cycle(Chip8 *chip8) {
             break;
         case 0x6000:
             printf("LD Vx, byte\n");
-            call(chip8);
+            ld_Vx(chip8);
             break;
         case 0x7000:
             printf("ADD Vx, byte\n");
@@ -229,5 +230,17 @@ void emulate_cycle(Chip8 *chip8) {
             break;
         default:
             break;
+    }
+
+    // update timers
+    if(chip8->delay_timer > 0) {
+        --chip8->delay_timer;
+    }
+
+    if(chip8->sound_timer > 0) {
+        if(chip8->sound_timer == 1) {
+            printf("BEEP\n");
+        }
+        --chip8->sound_timer;
     }
 }

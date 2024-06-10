@@ -20,6 +20,7 @@ typedef struct Chip8
     unsigned short stack[16];       // used to store the address that the interpreter shoud return to when finished with a subroutine
     unsigned char gfx[64][32];      // display
     unsigned char key[16];          // keypad
+    unsigned char draw_flag;
 } Chip8;
 
 #endif

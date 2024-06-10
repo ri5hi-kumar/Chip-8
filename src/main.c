@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 Chip8 chip8;
-char *rom_file = "some_rom";
+char *rom_file = "./roms/IBM_Logo.ch8";
 
 int main()
 {
@@ -25,6 +25,15 @@ int main()
         // Draw
         BeginDrawing();
         ClearBackground(RAYWHITE);
+
+        for (int x = 0; x < 64; x++) {
+            for (int y = 0; y < 32; y++) {
+                if (chip8.gfx[x][y]) {
+                    DrawRectangle(x * 20, y * 20, 20, 20, BLACK);
+                }
+            }
+        }
+
         EndDrawing();
     }
 
