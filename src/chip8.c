@@ -63,6 +63,16 @@ void initialize_chip8(Chip8 *chip8) {
     for(int i = 0; i < 16; i++) {
         chip8->stack[i] = 0;
     }
+
+    // keyboard setup
+    for(int i = 0; i < 16; i++) {
+        chip8->key[i] = 0;
+    }
+
+    // fonset loading
+    for(int i = 0; i < 80; i++) {
+        chip8->memory[i] = chip8_fontset[i];
+    }
 }
 
 void emulate_cycle(Chip8 *chip8) {

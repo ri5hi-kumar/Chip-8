@@ -323,12 +323,30 @@ void drw(Chip8 *chip8) {
     chip8->PC += 2;
 }
 
+/*
+ * Skip next instruction if key with the value of Vx is pressed.
+ * Checks the keyboard, and if the key corresponding to the value of Vx is currently in the down position, PC is increased by 2.
+ */
 void skp(Chip8 *chip8) {
-
+    unsigned char x = (chip8->opcode & 0x0F00) >> 8;
+    if(chip8->key[chip8->V[x]] != 0) {
+        chip8->PC += 4;
+    } else {
+        chip8->PC += 2;
+    }
 }
 
+/*
+ * Skip next instruction if key with the value of Vx is not pressed.
+ * Checks the keyboard, and if the key corresponding to the value of Vx is currently in the up position, PC is increased by 2.
+ */
 void sknp(Chip8 *chip8) {
-
+    unsigned char x = (chip8->opcode & 0x0F00) >> 8;
+    if(chip8->key[chip8->V[x]] == 0) {
+        chip8->PC += 4;
+    } else {
+        chip8->PC += 2;
+    }
 }
 
 /*
@@ -341,6 +359,10 @@ void ld_Vx_dt(Chip8 *chip8) {
     chip8->PC += 2;
 }
 
+/*
+ * Wait for a key press, store the value of the key in Vx.
+ * All execution stops until a key is pressed, then the value of that key is stored in Vx.
+ */
 void ld_Vx_key(Chip8 *chip8) {
 
 }
@@ -380,7 +402,9 @@ void add_i_Vx(Chip8 *chip8) {
  * The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx.
  */
 void ld_F_Vx(Chip8 *chip8) {
-    
+    unsigned char x = (chip8->opcode & 0x0F00) >> 8;
+    chip8->I = chip8->V[x] * 5;
+    chip8->PC += 2;
 }
 
 /*

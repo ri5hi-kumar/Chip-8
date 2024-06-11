@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 Chip8 chip8;
-char *rom_file = "./roms/IBM_Logo.ch8";
+char *rom_file = "./roms/bc_test.ch8";
 
 int main()
 {
