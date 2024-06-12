@@ -231,8 +231,8 @@ void subn_Vx_Vy(Chip8 *chip8) {
  */
 void shl(Chip8 *chip8) {
     unsigned char x = (chip8->opcode & 0x0F00) >> 8;
-    chip8->V[0xF] = chip8->V[x] & 0b10000000 == 1 ? 1 : 0;
-    chip8->V[x] <<= 1;
+    chip8->V[0xF] = chip8->V[x] >> 7;
+	chip8->V[x] <<= 1;
     chip8->PC += 2;
 }
 
@@ -364,7 +364,20 @@ void ld_Vx_dt(Chip8 *chip8) {
  * All execution stops until a key is pressed, then the value of that key is stored in Vx.
  */
 void ld_Vx_key(Chip8 *chip8) {
+    unsigned char x = (chip8->opcode & 0x0F00) >> 8;
+    
+    for(int i = 0; i < 16; i++) {
+        if(chip8->key[i] == 1) {
+            chip8->V[x] = i;
+            chip8->is_key_pressed = 1;
+        }
+    }
 
+    if(!chip8->is_key_pressed) {
+        return;
+    }
+
+    chip8->PC += 2;
 }
 
 /*

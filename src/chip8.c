@@ -35,6 +35,7 @@ void load_rom(Chip8 *chip8, const char *rom_file) {
         printf("ROM file doesn't exist\n");
         exit(EXIT_FAILURE);
     }
+    fclose(rom);
 }
 
 
@@ -46,6 +47,7 @@ void initialize_chip8(Chip8 *chip8) {
     chip8->sound_timer = 0;
     chip8->delay_timer = 0;
     chip8->draw_flag = 0;
+    chip8->is_key_pressed = 0;
 
     // clearing the display
     for(int i = 0; i < 64; i++) {
@@ -62,6 +64,11 @@ void initialize_chip8(Chip8 *chip8) {
     // clear stack
     for(int i = 0; i < 16; i++) {
         chip8->stack[i] = 0;
+    }
+
+    // clear registers
+    for(int i = 0; i < 16; i++) {
+        chip8->V[i] = 0; 
     }
 
     // keyboard setup
@@ -252,5 +259,133 @@ void emulate_cycle(Chip8 *chip8) {
             printf("BEEP\n");
         }
         --chip8->sound_timer;
+    }
+}
+
+/*
+ *  Keypad                   Keyboard
+ * +-+-+-+-+                +-+-+-+-+
+ * |1|2|3|C|                |1|2|3|4|
+ * +-+-+-+-+                +-+-+-+-+
+ * |4|5|6|D|                |Q|W|E|R|
+ * +-+-+-+-+       =>       +-+-+-+-+
+ * |7|8|9|E|                |A|S|D|F|
+ * +-+-+-+-+                +-+-+-+-+
+ * |A|0|B|F|                |Z|X|C|V|
+ * +-+-+-+-+                +-+-+-+-+
+ * 
+ * The above is the mapping for the chip8 hex keypad to keyboard
+ */
+void handle_input(Chip8 *chip8) {
+    if(IsKeyDown(KEY_ONE)) {
+        printf("1 key pressed\n");
+        chip8->key[0x0] = 1;
+    } else if(IsKeyUp(KEY_ONE)) {
+        chip8->key[0x0] = 0;
+    }
+
+    if(IsKeyDown(KEY_TWO)) {
+        printf("2 key pressed\n");
+        chip8->key[0x1] = 1;
+    } else if(IsKeyUp(KEY_TWO)) {
+        chip8->key[0x1] = 0;
+    }
+
+    if(IsKeyDown(KEY_THREE)) {
+        printf("3 key pressed\n");
+        chip8->key[0x2] = 1;
+    } else if(IsKeyUp(KEY_THREE)) {
+        chip8->key[0x2] = 0;
+    }
+
+    if(IsKeyDown(KEY_FOUR)) {
+        printf("4 key pressed\n");
+        chip8->key[0x3] = 1;
+    } else if(IsKeyUp(KEY_FOUR)) {
+        chip8->key[0x3] = 0;
+    }
+
+    if(IsKeyDown(KEY_Q)) {
+        printf("Q key pressed\n");
+        chip8->key[0x4] = 1;
+    } else if(IsKeyUp(KEY_Q)) {
+        chip8->key[0x4] = 0;
+    }
+
+    if(IsKeyDown(KEY_W)) {
+        printf("W key pressed\n");
+        chip8->key[0x5] = 1;
+    } else if(IsKeyUp(KEY_W)) {
+        chip8->key[0x5] = 0;
+    }
+
+    if(IsKeyDown(KEY_E)) {
+        printf("E key pressed\n");
+        chip8->key[0x6] = 1;
+    } else if(IsKeyUp(KEY_E)) {
+        chip8->key[0x6] = 0;
+    }
+
+    if(IsKeyDown(KEY_R)) {
+        printf("R key pressed\n");
+        chip8->key[0x7] = 1;
+    } else if(IsKeyUp(KEY_R)) {
+        chip8->key[0x7] = 0;
+    }
+
+    if(IsKeyDown(KEY_A)) {
+        printf("A key pressed\n");
+        chip8->key[0x8] = 1;
+    } else if(IsKeyUp(KEY_A)) {
+        chip8->key[0x8] = 0;
+    }
+
+    if(IsKeyDown(KEY_S)) {
+        printf("S key pressed\n");
+        chip8->key[0x9] = 1;
+    } else if(IsKeyUp(KEY_S)) {
+        chip8->key[0x9] = 0;
+    }
+
+    if(IsKeyDown(KEY_D)) {
+        printf("D key pressed\n");
+        chip8->key[0xA] = 1;
+    } else if(IsKeyUp(KEY_D)) {
+        chip8->key[0xA] = 0;
+    }
+
+    if(IsKeyDown(KEY_F)) {
+        printf("F key pressed\n");
+        chip8->key[0xB] = 1;
+    } else if(IsKeyUp(KEY_F)) {
+        chip8->key[0xB] = 0;
+    }
+
+    if(IsKeyDown(KEY_Z)) {
+        printf("Z key pressed\n");
+        chip8->key[0xC] = 1;
+    } else if(IsKeyUp(KEY_Z)) {
+        chip8->key[0xC] = 0;
+    }
+
+    if(IsKeyDown(KEY_X)) {
+        printf("X key pressed\n");
+        chip8->key[0xD] = 1;
+    } else if(IsKeyUp(KEY_X)) {
+        chip8->key[0xD] = 0;
+    }
+
+    if(IsKeyDown(KEY_C)) {
+        printf("C key pressed\n");
+        chip8->key[0xE] = 1;
+    } else if(IsKeyUp(KEY_C)) {
+        chip8->key[0xE] = 0;
+    }
+
+    if(IsKeyDown(KEY_V)) {
+        printf("V key pressed\n");
+        chip8->key[0xF] = 1;
+    } else if(IsKeyUp(KEY_V)) {
+        chip8->key[0xF] = 0;
     }
 }

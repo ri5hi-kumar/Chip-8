@@ -41,6 +41,7 @@ typedef struct Chip8
     unsigned char gfx[64][32];      // display
     unsigned char key[16];          // keypad
     unsigned char draw_flag;
+    unsigned char is_key_pressed;
 } Chip8;
 
 #endif

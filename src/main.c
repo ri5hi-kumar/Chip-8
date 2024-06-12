@@ -1,9 +1,7 @@
-#include "raylib.h"
 #include "chip8.h"
-#include <stdio.h>
 
 Chip8 chip8;
-char *rom_file = "./roms/bc_test.ch8";
+char *rom_file = "./roms/BC_test.ch8";
 
 int main()
 {
@@ -20,6 +18,7 @@ int main()
     // Main game loop
     while (!WindowShouldClose()) // Detect window close button or ESC key
     {
+        handle_input(&chip8);
         emulate_cycle(&chip8);
 
         // Draw
