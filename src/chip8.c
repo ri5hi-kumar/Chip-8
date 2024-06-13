@@ -36,6 +36,7 @@ void load_rom(Chip8 *chip8, const char *rom_file) {
         exit(EXIT_FAILURE);
     }
     fclose(rom);
+    free(rom_buffer);
 }
 
 
@@ -100,7 +101,7 @@ void emulate_cycle(Chip8 *chip8) {
                     ret(chip8);
                     break;
                 default:
-                    break;
+                    exit(EXIT_FAILURE);
             }
             break;
         case 0x1000:
@@ -133,6 +134,10 @@ void emulate_cycle(Chip8 *chip8) {
             break;
         case 0x8000:
             switch (chip8->opcode & 0xF00F) {
+                case 0x8000:
+                    printf("LD Vx, Vy\n");
+                    ld_Vx_Vy(chip8);
+                    break;
                 case 0x8001:
                     printf("OR Vx, Vy\n");
                     or_Vx_Vy(chip8);
@@ -166,7 +171,7 @@ void emulate_cycle(Chip8 *chip8) {
                     shl(chip8);
                     break;
                 default:
-                    break;
+                    exit(EXIT_FAILURE);
             }
             break;
         case 0x9000:
@@ -200,7 +205,7 @@ void emulate_cycle(Chip8 *chip8) {
                     sknp(chip8);
                     break;
                 default:
-                    break;
+                    exit(EXIT_FAILURE);
             }
             break;
         case 0xF000:
@@ -242,11 +247,11 @@ void emulate_cycle(Chip8 *chip8) {
                     ld_Vx_regs(chip8);
                     break;
                 default:
-                    break;
+                    exit(EXIT_FAILURE);
             }
             break;
         default:
-            break;
+            exit(EXIT_FAILURE);
     }
 
     // update timers

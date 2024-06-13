@@ -365,16 +365,19 @@ void ld_Vx_dt(Chip8 *chip8) {
  */
 void ld_Vx_key(Chip8 *chip8) {
     unsigned char x = (chip8->opcode & 0x0F00) >> 8;
+    unsigned char p;
     
     for(int i = 0; i < 16; i++) {
         if(chip8->key[i] == 1) {
-            chip8->V[x] = i;
             chip8->is_key_pressed = 1;
+            p = i;
         }
     }
 
     if(!chip8->is_key_pressed) {
-        return;
+        chip8->PC -= 2;
+    } else {
+        chip8->V[x] = p;
     }
 
     chip8->PC += 2;

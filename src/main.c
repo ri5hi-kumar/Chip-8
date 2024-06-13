@@ -1,7 +1,7 @@
 #include "chip8.h"
 
 Chip8 chip8;
-char *rom_file = "./roms/BC_test.ch8";
+char *rom_file = "./roms/BREAKOUT.ch8";
 
 int main()
 {
@@ -23,12 +23,12 @@ int main()
 
         // Draw
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
 
         for (int x = 0; x < 64; x++) {
             for (int y = 0; y < 32; y++) {
                 if (chip8.gfx[x][y]) {
-                    DrawRectangle(x * 20, y * 20, 20, 20, BLACK);
+                    DrawRectangle(x * 20, y * 20, 20, 20, RAYWHITE);
                 }
             }
         }
