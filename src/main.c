@@ -1,18 +1,23 @@
 #include "chip8.h"
 
 Chip8 chip8;
-char *rom_file = "./roms/BREAKOUT.ch8";
 
-int main()
+int main(int argc, char *argv[])
 {
     int const WINDOW_HEIGHT = 640;
     int const WINDOW_WIDTH = 1280;
+
+    if (argv[1] == NULL) {
+        printf("Program Usage: ./chip8 path/to/rom\n");
+        exit(EXIT_FAILURE);
+    }
 
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "CHIP-8");
 
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
 
     initialize_chip8(&chip8);
+    char *rom_file = argv[1];
     load_rom(&chip8, rom_file);
 
     // Main game loop
